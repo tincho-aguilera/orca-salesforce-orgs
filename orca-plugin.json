@@ -1,0 +1,60 @@
+{
+  "manifestVersion": 2,
+  "id": "salesforce-orgs",
+  "name": "Orca Salesforce Orgs",
+  "version": "0.1.0",
+  "description": "Lista las orgs de Salesforce (sf CLI), muestra la org actual en la barra de estado y permite abrir cualquiera.",
+  "engines": {
+    "orca": ">=1.4.248"
+  },
+  "execution": "trusted-worker",
+  "pluginApi": 1,
+  "main": "src/worker.ts",
+  "contributes": {
+    "panels": [
+      {
+        "id": "salesforce-orgs",
+        "title": "Salesforce Orgs",
+        "icon": "cloud",
+        "entry": "src/panel.tsx",
+        "ui": "components"
+      }
+    ],
+    "commands": [
+      {
+        "id": "salesforce-orgs.openCurrent",
+        "title": "Salesforce: Abrir org actual"
+      },
+      {
+        "id": "salesforce-orgs.refresh",
+        "title": "Salesforce: Refrescar orgs"
+      }
+    ],
+    "events": [
+      {
+        "on": "workspace.changed"
+      }
+    ],
+    "statusBarItems": [
+      {
+        "id": "current-org",
+        "text": "SF: ...",
+        "icon": "cloud",
+        "tone": "neutral",
+        "tooltip": "Org actual de Salesforce (clic para abrir)",
+        "command": "salesforce-orgs.openCurrent"
+      }
+    ]
+  },
+  "capabilities": [
+    {
+      "kind": "workspace:read"
+    },
+    {
+      "kind": "storage:own"
+    },
+    {
+      "kind": "notifications:show"
+    }
+  ]
+}
