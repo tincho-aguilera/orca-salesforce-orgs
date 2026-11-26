@@ -1,16 +1,16 @@
 import { defineCheck } from 'orca/testing'
 
 const sampleState = {
-  currentOrg: 'ACHS_dev',
+  currentOrg: 'dev-sandbox',
   currentOrgLocation: 'Local',
-  workspaceName: 'achs',
+  workspaceName: 'salesforce-app',
   orgs: [
     {
-      username: 'maguilerade@achs.cl.maguilera',
-      alias: 'ACHS_dev',
-      orgId: '00DO800000ZrTfgMAF',
-      name: 'ACHS',
-      instanceUrl: 'https://achs--maguilera.sandbox.my.salesforce.com',
+      username: 'dev@example.com.sandbox',
+      alias: 'dev-sandbox',
+      orgId: '00D000000000001AAA',
+      name: 'Acme Sandbox',
+      instanceUrl: 'https://acme--dev.sandbox.my.salesforce.com',
       kind: 'sandbox',
       connectedStatus: 'Connected',
       isDefaultUsername: false,
@@ -18,11 +18,11 @@ const sampleState = {
       expirationDate: null
     },
     {
-      username: 'servicevoice@puzzles.solutions',
-      alias: 'SEK_Prod',
-      orgId: '00D0Y000002ITQ6UAO',
-      name: 'INSTITUCIÓN EDUCATIVA SEK S.L.',
-      instanceUrl: 'https://sek.my.salesforce.com',
+      username: 'admin@example.com',
+      alias: 'acme-prod',
+      orgId: '00D000000000002AAA',
+      name: 'Acme Production',
+      instanceUrl: 'https://acme.my.salesforce.com',
       kind: 'production',
       connectedStatus: 'Connected',
       isDefaultUsername: false,

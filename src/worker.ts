@@ -177,6 +177,23 @@ async function updateStatusBar(orca: OrcaWorkerApi, state: OrgsState): Promise<v
     .catch(() => {})
 }
 
+export function assertValidTarget(target: unknown): string {
+  if (typeof target !== 'string') {
+    throw new Error('El identificador de la org es inválido.')
+  }
+  const trimmed = target.trim()
+  if (!trimmed || trimmed.length > 256) {
+    throw new Error('El identificador de la org es inválido.')
+  }
+  if (trimmed.startsWith('-')) {
+    throw new Error('El identificador de la org no puede comenzar con "-".')
+  }
+  if (!/^[A-Za-z0-9_@.+:-]+$/.test(trimmed)) {
+    throw new Error('El identificador de la org contiene caracteres no permitidos.')
+  }
+  return trimmed
+}
+
 export function createWorker(runner: SfRunner = defaultRunner) {
   return function activate(orca: OrcaWorkerApi): void {
     let inflight: Promise<OrgsState> | null = null
@@ -225,22 +242,29 @@ export function createWorker(runner: SfRunner = defaultRunner) {
     }
 
     async function setCurrentOrg(target: string, cwd: string, signal?: AbortSignal): Promise<void> {
+      const safeTarget = assertValidTarget(target)
       try {
-        await runner.exec(['config', 'set', 'target-org', target, '--json'], cwd, signal)
+        await runner.exec(['config', 'set', 'target-org', safeTarget, '--json'], cwd, signal)
       } catch {
-        await runner.exec(['config', 'set', 'target-org', target, '--global', '--json'], cwd, signal)
+        await runner.exec(['config', 'set', 'target-org', safeTarget, '--global', '--json'], cwd, signal)
       }
     }
 
     async function openOrg(target: string, signal?: AbortSignal): Promise<{ ok: boolean; target: string; error?: string }> {
+      let safeTarget: string
+      try {
+        safeTarget = assertValidTarget(target)
+      } catch (err) {
+        return { ok: false, target: String(target ?? ''), error: err instanceof Error ? err.message : String(err) }
+      }
       const { cwd } = await getActiveWorkspace(orca)
       try {
-        await runner.exec(['org', 'open', '-o', target, '--json'], cwd, signal)
-        return { ok: true, target }
+        await runner.exec(['org', 'open', '-o', safeTarget, '--json'], cwd, signal)
+        return { ok: true, target: safeTarget }
       } catch (err) {
         const message = err instanceof Error ? err.message : String(err)
-        orca.log(`Error abriendo org ${target}: ${message}`)
-        return { ok: false, target, error: message }
+        orca.log(`Error abriendo org ${safeTarget}: ${message}`)
+        return { ok: false, target: safeTarget, error: message }
       }
     }
 

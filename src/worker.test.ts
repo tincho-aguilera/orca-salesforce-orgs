@@ -1,5 +1,5 @@
 import { assert, mockHost, mountWorker, test } from 'orca/testing'
-import { createWorker, normalizeOrgs } from './worker'
+import { assertValidTarget, createWorker, normalizeOrgs } from './worker'
 
 test('normalizes and sorts current org first', () => {
   const orgs = normalizeOrgs(
@@ -100,4 +100,12 @@ test('worker lists orgs, updates status bar and opens an org', async () => {
   assert.ok(calls.some((c) => c[0] === 'config' && c[1] === 'set' && c[2] === 'target-org' && c[3] === 'ACHS_dev'))
   assert.deepEqual(worker.refusals, [])
   await worker.deactivate()
+})
+
+test('rejects unsafe org targets', () => {
+  assert.equal(assertValidTarget('Dev_Sandbox'), 'Dev_Sandbox')
+  assert.equal(assertValidTarget('dev@example.com'), 'dev@example.com')
+  assert.throws(() => assertValidTarget(''))
+  assert.throws(() => assertValidTarget('--help'))
+  assert.throws(() => assertValidTarget('org; rm -rf /'))
 })

@@ -2,8 +2,20 @@
   "manifestVersion": 2,
   "id": "salesforce-orgs",
   "name": "Orca Salesforce Orgs",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Lista las orgs de Salesforce (sf CLI), muestra la org actual en la barra de estado y permite abrir cualquiera.",
+  "author": {
+    "name": "Martin Aguilera",
+    "url": "https://github.com/tincho-aguilera"
+  },
+  "repository": "https://github.com/tincho-aguilera/orca-salesforce-orgs",
+  "homepage": "https://github.com/tincho-aguilera/orca-salesforce-orgs",
+  "license": "MIT",
+  "icon": "assets/icon.png",
+  "cover": {
+    "path": "assets/cover.jpg",
+    "alt": "Panel de Orca Salesforce Orgs mostrando orgs conectadas (Prod, Sandbox y Scratch)"
+  },
   "engines": {
     "orca": ">=1.4.248"
   },
